@@ -1,0 +1,34 @@
+FROM alpine:3:12:0
+LABEL maintainer="Nick Dat Le <nick_dat_le@yahoo.com>"
+
+RUN apk add update
+RUN apk add upgrade
+RUN apk add git
+RUN apk add automake
+RUN apk add autoconf
+RUN apk add libtool
+RUN apk add perl
+RUN apk add make
+RUN apk add gcc
+RUN apk add --no-cache --upgrade bash
+RUN apk add libc-dev
+#COPY ./ /portable/
+git clone https://github.com/libressl-portable/portable.git
+WORKDIR /portable
+
+ # see ./configure --help for configuration options
+ # runs builtin unit tests
+ # set DESTDIR= to install to an alternate location
+RUN ./autogen.sh \
+    && ./configure \
+    && make check    \
+    && make install
+
+# RUN ./configure # see ./configure --help for configuration options \
+#     && make check  # runs builtin unit tests \
+#     && make install # set DESTDIR= to install to an alternate location
+
+
+
+
+#git clone https://github.com/libressl-portable/portable.git
